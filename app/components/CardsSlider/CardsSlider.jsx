@@ -1,0 +1,72 @@
+"use client"
+import Swiper from "swiper";
+import {Autoplay, Pagination} from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import Styles from "./CardsSlider.module.css"
+import { useEffect } from "react";
+import Link from "next/link";
+import { Card } from "../Card/Card";
+
+
+export const CardsSlider = (props) =>{
+    useEffect(() =>{
+    const options = {
+            // Параметры слайдера для экранов мобильных гаджетов шириной < 450px
+      loop: false, // Отключи бесконечное переключение слайдов
+      spaceBetween: 10, // Установи расстояние между слайдами в 10px
+      allowTouchMove: true, // Позволь пользователю перемещать слайды
+      slidesPerView: 1, // Количество отображаемых слайдов за раз = 1
+            // Отключи автовоспроизведение — модуль Autoplay
+      autoplay: {
+        enabled: false,
+      },
+            // Параметры слайдера для мониторов компьютеров
+      pagination: {
+        el: ".swiper-pagination",
+        type: "fraction",
+        enabled: true,
+        clickable: true,
+      },
+            // Параметры слайдера для мониторов > 450px
+      breakpoints: {
+        450: {
+          loop: true,
+          spaceBetween: 20,
+          slidesPerView: "auto",
+          allowTouchMove: false,
+          speed: 6500,
+          autoplay: {
+            enabled: true,
+            delay: 0,
+          },
+          pagination: {
+            enabled: false,
+          },
+        },
+      },
+            // Используй модули для разных типов анимации
+      modules: [Autoplay, Pagination],
+};
+    new Swiper(".swiper", options);
+
+}, [])
+
+
+return(
+<div className={`swiper ${Styles["slider"]}`}>
+<ul className={`swiper-wrapper ${Styles["slider-wrapper"]}`}>
+          {props.data.map(item =>{
+          return(
+        <li className={`swiper-slide ${Styles["slide"]}`} key={item.id}>
+                    <Link href={`/games/${item.id}`} className={Styles["card-list__link"]}>
+                        <Card {...item} />
+                    </Link>
+                </li>
+          )
+      })}
+      </ul>  
+      <div className={`swiper-pagination ${Styles["pagination"]}`}></div>
+</div>
+  )
+}
